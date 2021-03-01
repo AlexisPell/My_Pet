@@ -1,21 +1,22 @@
 import { useMemo } from 'react';
-
-import { ApolloClient, HttpLink } from '@apollo/client';
-import { cache } from './apolloCache';
+import { ApolloClient } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 
 import merge from 'deepmerge';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
+
+import { cache } from './apolloCache';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-let apolloClient;
+let apolloClient: any;
 
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
+    link: createUploadLink({
       uri: 'http://localhost:4000/graphql',
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+      credentials: 'same-origin',
     }),
     cache,
     connectToDevTools: true,
@@ -34,7 +35,7 @@ export function initializeApolloClient(initialState = null) {
     const existingCache = _apolloClient.extract();
 
     // Merge the existing cache into data passed from getStaticProps/getServerSideProps
-    const data = merge(initialState, existingCache, {
+    const data = merge(initialState as any, existingCache, {
       // combine arrays using object equality (like in sets)
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
@@ -54,7 +55,7 @@ export function initializeApolloClient(initialState = null) {
 }
 
 // Use case is for SSR return
-export function addApolloState(client, pageProps) {
+export function addApolloState(client: any, pageProps: any) {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }
@@ -63,7 +64,7 @@ export function addApolloState(client, pageProps) {
 }
 
 // Wrapper for App comp
-export function useApollo(pageProps) {
+export function useApollo(pageProps: any) {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
   const store = useMemo(() => initializeApolloClient(state), [state]);
   return store;

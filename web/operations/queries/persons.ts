@@ -7,10 +7,12 @@ export const GET_PERSONS = gql`
       name
       surname
       patronymic
-      passId
+      card
+      state
+      photo
+      accessPointIds
       createdAt
       updatedAt
-      concattedBIO
     }
   }
 `;

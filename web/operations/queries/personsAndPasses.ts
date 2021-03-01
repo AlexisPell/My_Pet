@@ -8,7 +8,9 @@ export const usePnPQuery = () => {
   const { data: passesData, loading: passesLoading, error: passesError } = useQuery(GET_PASSES);
 
   if (personsData && passesData && !personsLoading && !passesLoading) {
-    localPnp([...personsData.persons, ...passesData.passes]);
+    const persons = personsData.persons;
+    const passes = passesData.passes;
+    localPnp([...personsData.persons, ...passesData.passes] as any);
   }
 
   return {

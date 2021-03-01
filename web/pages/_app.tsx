@@ -1,7 +1,9 @@
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../lib/apolloClient';
 
-export default function App({ Component, pageProps }) {
+import 'antd/dist/antd.css';
+
+export default function App({ Component, pageProps }: any) {
   const apolloClient = useApollo(pageProps);
 
   return (
