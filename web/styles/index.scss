@@ -1,0 +1,19 @@
+@import './app.scss';
+@import './navbar.scss';
+@import './about.scss';
+
+._app {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
+  font-size: 20px;
+  background: linear-gradient(135deg, #fdc0c0, #ccd0ff) repeat-y fixed;
+  background-attachment: local;
+}
+
+.content-layout {
+  margin: auto;
+  max-width: 1200px;
+  padding: 25px 50px;
+}

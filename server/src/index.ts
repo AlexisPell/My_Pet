@@ -46,6 +46,11 @@ import { MyContext } from './typings/context';
     schema: await buildSchema({
       resolvers: [PersonResolver, PlanResolver],
       validate: false,
+      emitSchemaFile: {
+        path: path.join(__dirname + '../../../web/graphql/schema.graphql'),
+        commentDescriptions: true,
+        sortedSchema: false,
+      },
     }),
     context: ({ req, res }): MyContext => ({ req, res }),
   });

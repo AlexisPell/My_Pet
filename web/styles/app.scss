@@ -1,0 +1,27 @@
+.app {
+  margin: auto;
+  max-width: 1200px;
+  padding: 25px 50px;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    .to-center {
+      align-self: center;
+    }
+    .to-right {
+      align-self: flex-end;
+    }
+    > * {
+      margin-bottom: 20px;
+    }
+  }
+  &__links {
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+  }
+}

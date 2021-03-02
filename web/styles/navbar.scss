@@ -1,0 +1,25 @@
+.navbar {
+  background: #fcfcfc;
+  &__top {
+    padding: 10px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: 1px solid #ccc;
+    > div {
+      margin-left: 8px;
+    }
+  }
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+      margin-left: 10px;
+    }
+  }
+  &__bottom {
+    padding: 10px 50px;
+  }
+}
