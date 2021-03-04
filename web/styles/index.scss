@@ -1,6 +1,8 @@
+@import './antd/index.scss';
 @import './app.scss';
 @import './navbar.scss';
 @import './about.scss';
+@import './plans.scss';
 
 ._app {
   width: 100%;
@@ -13,7 +15,9 @@
 }
 
 .content-layout {
-  margin: auto;
+  margin: 15px auto;
+  height: 100%;
   max-width: 1200px;
-  padding: 25px 50px;
+  padding: 25px;
+  background-color: #fff;
 }

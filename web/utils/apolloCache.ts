@@ -3,9 +3,15 @@ import { InMemoryCache, makeVar } from '@apollo/client';
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
-      fields: {},
+      fields: {
+        // someVar: {
+        //   read: () => {
+        //     return someVar();
+        //   },
+        // },
+      },
     },
   },
 });
 
-export const localPnp = makeVar([]);
+// export const someVar = makeVar<any[]>([]);

@@ -1,0 +1,28 @@
+.plans {
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  &__list {
+    width: 270px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-right: 20px;
+  }
+  &__list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    > div:nth-child(1) {
+      width: 100%;
+    }
+    > div:nth-child(2) {
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: row;
+      > * {
+        margin-left: 5px;
+      }
+    }
+  }
+}

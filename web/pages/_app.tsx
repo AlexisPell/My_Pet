@@ -3,7 +3,6 @@ import { useApollo } from '../utils/apolloClient';
 import 'antd/dist/antd.css';
 import './../styles/index.scss';
 
-import Navbar from './../components/navbar/index';
 import Head from 'next/head';
 
 export default function App({ Component, pageProps }: any) {
@@ -19,7 +18,6 @@ export default function App({ Component, pageProps }: any) {
             rel='stylesheet'
           />
         </Head>
-        <Navbar />
         <Component {...pageProps} />
       </div>
     </ApolloProvider>

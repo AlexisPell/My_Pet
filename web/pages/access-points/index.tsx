@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
+import Navbar from 'containers/navbar';
 
 interface NextProps {}
 
@@ -8,12 +8,12 @@ const AccessPoints: NextPage<NextProps> = () => {
   const router = useRouter();
 
   return (
-    <div className='content-layout'>
-      <Head>
-        <title>AccessPoints settings</title>
-      </Head>
-      <h1>AccessPoints page list</h1>
-    </div>
+    <>
+      <Navbar title='access points' />
+      <div className='content-layout'>
+        <h1>AccessPoints page list</h1>
+      </div>
+    </>
   );
 };
 
