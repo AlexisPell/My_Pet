@@ -11,6 +11,14 @@ export const cache = new InMemoryCache({
         // },
       },
     },
+    Plans: {
+      merge: true,
+      keyFields: ['id'],
+    },
+    Plan: {
+      merge: true,
+      keyFields: ['id'],
+    },
   },
 });
 

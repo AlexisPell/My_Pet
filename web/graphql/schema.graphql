@@ -6,6 +6,8 @@
 type Query {
   persons: [Person!]!
   person(id: Int!): Person
+  accessPoints(planId: Int): [AccessPoint!]!
+  accessPoint(id: Int!): AccessPoint
   plans: [Plan!]!
   plan(id: Int!): Plan
 }
@@ -24,6 +26,18 @@ type Person {
   concattedBIO: String!
 }
 
+type AccessPoint {
+  id: Float!
+  name: String!
+  type: String!
+  x: Int
+  y: Int
+  personIds: [Int!]
+  planId: Int
+  createdAt: String!
+  updatedAt: String!
+}
+
 type Plan {
   id: Float!
   name: String!
@@ -34,9 +48,12 @@ type Plan {
 }
 
 type Mutation {
-  createPerson(state: String, card: String, patronymic: String, surname: String!, name: String!): PersonResponse!
+  createPerson(state: String!, card: String!, patronymic: String!, surname: String!, name: String!): PersonResponse!
   updatePerson(state: String, card: String, patronymic: String, surname: String, name: String, id: Int!): PersonResponse
-  deletePerson(ids: [Int!]!): Boolean!
+  deletePersons(ids: [Int!]!): Boolean!
+  createAccessPoint(type: String!, name: String!): AccessPointResponse!
+  updateAccessPoint(planId: Int, y: Int, x: Int, type: String, name: String, id: Int!): AccessPointResponse
+  deleteAccessPoint(id: Int!): Boolean!
   createPlan(name: String!): PlanResponse!
   planPhotoUpload(id: Float!, file: String!): String!
   deletePlans(ids: [Int!]!): Boolean!
@@ -50,6 +67,11 @@ type PersonResponse {
 type FieldError {
   errorType: String!
   message: String!
+}
+
+type AccessPointResponse {
+  errors: [FieldError!]
+  accessPoint: AccessPoint
 }
 
 type PlanResponse {

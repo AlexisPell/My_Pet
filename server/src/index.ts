@@ -10,6 +10,7 @@ import { buildSchema } from 'type-graphql';
 
 // Resolvers
 import { PersonResolver } from './resolvers/persons';
+import { AccessPointResolver } from './resolvers/accessPoints';
 import { PlanResolver } from './resolvers/plans';
 
 // Entities
@@ -44,7 +45,7 @@ import { MyContext } from './typings/context';
   // Apollo Server
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PersonResolver, PlanResolver],
+      resolvers: [PersonResolver, PlanResolver, AccessPointResolver],
       validate: false,
       emitSchemaFile: {
         path: path.join(__dirname + '../../../web/graphql/schema.graphql'),

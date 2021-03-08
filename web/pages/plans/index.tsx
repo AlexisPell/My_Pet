@@ -8,10 +8,10 @@ const { confirm } = Modal;
 
 // Apollo
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_PLANS } from './../../operations/queries/plans';
 import { plans } from './../../graphql/generated/plans';
-import { DELETE_PLAN } from 'operations/mutations/deletePlan';
 import { deletePlans, deletePlansVariables } from 'graphql/generated/deletePlans';
+import { GET_PLANS } from './../../operations/queries/plans';
+import { DELETE_PLAN } from 'operations/mutations/deletePlan';
 
 import Spinner from './../../components/loader';
 import Navbar from './../../containers/navbar/index';
@@ -49,7 +49,7 @@ const Plans: NextPage = () => {
             header={
               <>
                 <div className='plans__list-item' style={{ marginBottom: '10px' }}>
-                  <strong style={{ fontSize: '20px' }}>Plans List:</strong>
+                  <div style={{ fontSize: '22px' }}>Plans List:</div>
                   <div>
                     <PlusSquareTwoTone
                       style={{ fontSize: '20px' }}
@@ -79,11 +79,27 @@ const Plans: NextPage = () => {
                       onClick={() =>
                         confirm({
                           title: `Do you want to delete plan ${plan.name}?`,
-                          onOk: () =>
-                            deletePlan({
+                          onOk: async () => {
+                            await deletePlan({
                               variables: { ids: [plan.id] },
-                              refetchQueries: [{ query: GET_PLANS }],
-                            }),
+                              update: (cache) => {
+                                const cachedPlans = cache.readQuery<plans>({
+                                  query: GET_PLANS,
+                                });
+                                const newPlans = [
+                                  ...cachedPlans!.plans.filter((p) => p.id !== plan.id),
+                                ];
+                                setPlanId(newPlans[0].id);
+
+                                cache.writeQuery<plans>({
+                                  query: GET_PLANS,
+                                  data: {
+                                    plans: newPlans,
+                                  },
+                                });
+                              },
+                            });
+                          },
                         })
                       }
                     />
@@ -97,6 +113,7 @@ const Plans: NextPage = () => {
       </div>
       {createPlanModalVisible && (
         <CreatePlan
+          setPlanId={(planId) => setPlanId(planId)}
           visible={createPlanModalVisible}
           onClose={() => setCreatePlanModalVisible(false)}
         />

@@ -8,7 +8,7 @@ import { v4 } from 'uuid';
 import { Plan } from './../entities/Plan';
 import { FieldError } from './../entities/typeEntities/FieldError';
 
-import { File } from './../typings/file';
+import { plansErrorResolver } from './../utils/plansErrorResolver';
 
 @ObjectType()
 class PlanResponse {
@@ -48,17 +48,7 @@ export class PlanResolver {
   async createPlan(@Arg('name') name: string): Promise<PlanResponse> {
     const plans = await Plan.find();
     let duplicatedNameError = false;
-
-    if (name.length < 2) {
-      return {
-        errors: [
-          {
-            errorType: "Plan's name is too short",
-            message: 'Minimal length is 2 characters :)',
-          },
-        ],
-      };
-    }
+    if (name.length < 2) return plansErrorResolver('SHORT_NAME_ERROR');
 
     plans.forEach((p) => {
       if (p.name === name) {
@@ -66,16 +56,7 @@ export class PlanResolver {
       }
     });
 
-    if (duplicatedNameError) {
-      return {
-        errors: [
-          {
-            errorType: 'Such plan exists',
-            message: 'Looks like a plan with this name already exists... :p',
-          },
-        ],
-      };
-    }
+    if (duplicatedNameError) return plansErrorResolver('DUPLICATION_NAME_ERROR');
 
     // const qb = await getConnection()
     //   .createQueryBuilder()

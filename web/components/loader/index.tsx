@@ -6,11 +6,7 @@ interface SpinProps {
 }
 
 const Spinner: React.FC<SpinProps> = ({ tip }) => {
-  return (
-    <div style={{ width: 'auto', display: 'flex', justifyContent: 'center', paddingTop: '25px' }}>
-      <Spin tip={tip} />
-    </div>
-  );
+  return <Spin tip={tip} />;
 };
 
 export default Spinner;

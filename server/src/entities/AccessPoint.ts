@@ -30,26 +30,26 @@ export class AccessPoint extends BaseEntity {
   @Column()
   type!: IAcessPointType;
 
-  @Field(() => String!, { nullable: true })
-  @Column()
-  x!: string;
+  @Field(() => Int, { nullable: true })
+  @Column({ nullable: true })
+  x: number;
 
-  @Field(() => String!, { nullable: true })
-  @Column()
-  y!: string;
+  @Field(() => Int, { nullable: true })
+  @Column({ nullable: true })
+  y: number;
 
   // Person many to many
   @Field(() => [Int], { nullable: true })
   @Column('int', { array: true, nullable: true })
-  PersonIds: number[];
+  personIds: number[];
 
   @ManyToMany(() => Person, (person) => person.accessPointIds)
-  Persons: Person[];
+  persons: Person[];
 
   // Plan many to one
-  @Field(() => Int!)
-  @Column()
-  planId!: number;
+  @Field(() => Int, { nullable: true })
+  @Column({ nullable: true })
+  planId: number;
 
   @ManyToOne(() => Plan, (plan) => plan.accessPoints)
   plan: Plan;

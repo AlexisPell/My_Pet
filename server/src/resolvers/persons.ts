@@ -9,13 +9,14 @@ import {
   Root,
   ObjectType,
   Field,
-  InputType,
 } from 'type-graphql';
 
 import { Person } from '../entities/Person';
 import { FieldError } from './../entities/typeEntities/FieldError';
 
 import { IState } from 'src/typings/pass';
+
+import { personErrorResolver } from './../utils/personsErrorResolver';
 
 @ObjectType()
 class PersonResponse {
@@ -62,24 +63,14 @@ export class PersonResolver {
   async createPerson(
     @Arg('name') name: string,
     @Arg('surname') surname: string,
-    @Arg('patronymic', { nullable: true }) patronymic: string,
-    @Arg('card', { nullable: true }) card: string,
-    @Arg('state', { nullable: true }) state: IState = 'ACTIVE'
+    @Arg('patronymic') patronymic: string,
+    @Arg('card') card: string,
+    @Arg('state') state: IState = 'ACTIVE'
   ): Promise<PersonResponse> {
     const persons = await Person.find();
     let duplicatedBioError = false;
     let duplicatedCardNum = false;
-
-    if (card.length < 4 || card.length > 8) {
-      return {
-        errors: [
-          {
-            errorType: 'Pass is of unacceptable length',
-            message: "Sorry, password's length must be in space from 4 to 8",
-          },
-        ],
-      };
-    }
+    if (card.length < 4 || card.length > 8) return personErrorResolver('CARD_LENGTH_ERROR');
 
     const person = Person.create({ name, surname, patronymic, card, state });
     persons.forEach((p) => {
@@ -90,31 +81,10 @@ export class PersonResolver {
         duplicatedCardNum = true;
       }
     });
-
-    if (duplicatedBioError) {
-      return {
-        errors: [
-          {
-            errorType: 'Such person exists',
-            message: 'Looks like a person with this BIO already exists... :p',
-          },
-        ],
-      };
-    }
-
-    if (duplicatedCardNum) {
-      return {
-        errors: [
-          {
-            errorType: 'Such card number exists',
-            message: 'Looks like a person with this card already exists... :p',
-          },
-        ],
-      };
-    }
+    if (duplicatedBioError) return personErrorResolver('DUPLICATION_NAME_ERROR');
+    if (duplicatedCardNum) return personErrorResolver('DUPLICATION_CARD_ERROR');
 
     await person.save();
-
     return { person };
   }
 
@@ -131,17 +101,7 @@ export class PersonResolver {
     let person = await Person.findOne(id);
     let duplicatedBioError = false;
     let duplicatedCardNum = false;
-
-    if (!person) {
-      return {
-        errors: [
-          {
-            errorType: 'Persons doesnt exist',
-            message: 'Sorry, we broke smth :) person not found... :p',
-          },
-        ],
-      };
-    }
+    if (!person) return personErrorResolver('PERSON_DOESNOT_EXIST');
 
     name ? (person.name = name) : null;
     surname ? (person.surname = surname) : null;
@@ -158,35 +118,16 @@ export class PersonResolver {
       }
     });
 
-    if (duplicatedBioError) {
-      return {
-        errors: [
-          {
-            errorType: 'Such person exists',
-            message: 'Looks like a person with this BIO already exists... :p',
-          },
-        ],
-      };
-    }
+    if (duplicatedBioError) return personErrorResolver('DUPLICATION_NAME_ERROR');
 
-    if (duplicatedCardNum) {
-      return {
-        errors: [
-          {
-            errorType: 'Such card number exists',
-            message: 'Looks like a person with this card already exists... :p',
-          },
-        ],
-      };
-    }
+    if (duplicatedCardNum) return personErrorResolver('DUPLICATION_CARD_ERROR');
 
     await person.save();
-
     return { person };
   }
 
   @Mutation(() => Boolean)
-  async deletePerson(@Arg('ids', () => [Int!]!) ids: number[]): Promise<boolean> {
+  async deletePersons(@Arg('ids', () => [Int!]!) ids: number[]): Promise<boolean> {
     await Person.delete(ids);
     return true;
   }

@@ -13,21 +13,21 @@ import { GET_PLAN } from 'operations/queries/plan';
 interface indexProps {
   visible: boolean;
   onClose: () => void;
+  setPlanId: (planId: number) => void;
 }
 
-const CreatePlan: React.FC<indexProps> = ({ visible, onClose }) => {
+const CreatePlan: React.FC<indexProps> = ({ visible, onClose, setPlanId }) => {
   const [createPlan] = useMutation<createPlan, createPlanVariables>(CREATE_PLAN);
 
   const [name, setName] = useState('');
 
   const createNewPlan = async () => {
-    console.log('im here?');
     if (!name.length) {
       message.warning("Plan's name may not be void");
     } else if (name.length < 2) {
       message.warning("Too short for plan's name :)");
     } else {
-      const { data } = await createPlan({
+      await createPlan({
         variables: { name },
         // refetchQueries: [{ query: GET_PLANS }],
         update: (store, { data }) => {
@@ -35,13 +35,13 @@ const CreatePlan: React.FC<indexProps> = ({ visible, onClose }) => {
             const cachedPlans = store.readQuery<plans>({
               query: GET_PLANS,
             });
-
             store.writeQuery<plans>({
               query: GET_PLANS,
               data: {
                 plans: [data!.createPlan.plan!, ...cachedPlans!.plans],
               },
             });
+            setPlanId(data.createPlan.plan!.id);
             message.success("New floor's plan successfully created");
             onClose();
           } else if (data && data.createPlan.errors) {
@@ -69,6 +69,7 @@ const CreatePlan: React.FC<indexProps> = ({ visible, onClose }) => {
       title={<strong style={{ fontSize: '24px' }}>Create new plan</strong>}
     >
       <Input
+        autoFocus
         size='large'
         placeholder="Floor's name"
         required

@@ -49,7 +49,7 @@ export class Person extends BaseEntity {
   @Column('int', { array: true, nullable: true })
   accessPointIds: number[];
 
-  @ManyToMany(() => AccessPoint, (accessPoint) => accessPoint.PersonIds)
+  @ManyToMany(() => AccessPoint, (accessPoint) => accessPoint.personIds)
   accessPoints: AccessPoint[];
 
   @Field(() => String)

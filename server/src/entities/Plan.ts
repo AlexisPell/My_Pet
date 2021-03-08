@@ -29,7 +29,7 @@ export class Plan extends BaseEntity {
 
   // AccessPoint one to many
   @Field(() => [Int], { nullable: true })
-  @Column('int', { array: true, nullable: true })
+  @Column('int', { nullable: true, array: true })
   accessPointIds: number[];
 
   @OneToMany(() => AccessPoint, (accessPoint) => accessPoint.plan)
